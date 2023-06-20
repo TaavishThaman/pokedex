@@ -4,6 +4,7 @@ import PokemonCard from "./PokemonCard";
 import delay from 'delay';
 import Loading from "./Loading";
 import imgMap from "../data/icons";
+import typeBackgrounds from "../data/background-colors";
 
 const listStyle = {
     height : "100%",
@@ -170,27 +171,6 @@ const typeText = {
     marginRight : "15px"
 }
 
-const typeBackgrounds = {
-    'bug' : '#92BC2C',
-    'dark' : '#595761',
-    'dragon' : '#0C69C8',
-    'electric' : '#F2D94E',
-    'fairy' : '#EE90E6',
-    'fighting' : '#D3425F',
-    'fire' : '#FBA54C',
-    'flying' : '#A1BBEC',
-    'ghost' : '#5F6DBC',
-    'grass' : '#5FBD58',
-    'ground' : '#DA7C4D',
-    'ice' : '#75D0C1',
-    'normal' : '#A0A29F',
-    'poison' : '#B763CF',
-    'psychic' : '#FA8581',
-    'rock' : '#C9BB8A',
-    'steel' : '#5695A3',
-    'water' : '#539DDF'
-};
-
 const filterText = {
     fontFamily : "Roboto",
     fontSize : "18px",
@@ -253,7 +233,8 @@ function PokemonList() {
 
     async function fetchPokemonData() {
         setLoading(true);
-        const url = `https://pokeapi.co/api/v2/pokemon?offset=0&limit=500`;
+        const url = `https://pokeapi.co/api/v2/pokemon?offset=0&limit=1281`;
+        // const url = `https://pokeapi.co/api/v2/pokemon?offset=0&limit=50`;
         const result = await axios.get(url);
         setPokemonBaseData(result.data.results);
         setLoading(false);
@@ -310,7 +291,6 @@ function PokemonList() {
         activeFilters[key] = activeFilters[key].filter(e => e !== name)
         setActiveFilters({type : [...activeFilters['type']], region : [...activeFilters['region']]});
         setActiveDisplayFilters([...activeFilters['type'], ...activeFilters['region']]);
-        // applyFilters();
     }
 
     function applyFilters() {
@@ -357,6 +337,19 @@ function PokemonList() {
     useEffect(() => {
         fetchTypesData();
     }, [])
+
+    // useEffect(() => {
+    //     if(pokemonBaseData) {
+    //         console.log('here')
+    //         const pokemonObj = {};
+    //         for(let i=0; i<pokemonDetailedData.length; i++) {
+    //             const ele = pokemonDetailedData[i];
+    //             let arr  = [ele["data"]["id"], ele["data"]["sprites"]["other"]["official-artwork"]["front_default"], ele["data"]["types"]]
+    //             pokemonObj[pokemonBaseData[i]["name"]] = arr;
+    //         }
+    //         console.log(JSON.stringify(pokemonObj))
+    //     }
+    // }, [pokemonBaseData])
 
     return (
         <div style={listStyle}>

@@ -4,6 +4,7 @@ import Header from "../components/Header";
 import axios from "axios";
 import imgMap from "../data/icons";
 import { buildStyles, CircularProgressbar, CircularProgressbarWithChildren } from 'react-circular-progressbar';
+import PokemonEvolution from "../components/PokemonEvolution";
 
 const bodyContainer = {
     paddingLeft : "100px",
@@ -301,6 +302,10 @@ const progressTextMap = {
     'special-defense' : 'Special Defense'
 }
 
+const evolutionContainer = {
+    marginTop : "82px"
+}
+
 function PokemonDetails() {
     const params = useParams();
     const location = useLocation()
@@ -461,6 +466,9 @@ function PokemonDetails() {
                             </div>
                         </div>
                     </div>
+                </div>
+                <div style={evolutionContainer}>
+                    <PokemonEvolution data={evolutionData}></PokemonEvolution>
                 </div>
             </div> : <></>}
         </div>
