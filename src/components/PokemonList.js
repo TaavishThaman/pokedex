@@ -57,6 +57,7 @@ const searchIcon = {
 const filterContainer = {
     position : "relative"
 }
+
 const filterCount = {
     background: "#EF3E33",
     height : "17px",
@@ -252,7 +253,7 @@ function PokemonList() {
 
     async function fetchPokemonData() {
         setLoading(true);
-        const url = `https://pokeapi.co/api/v2/pokemon?offset=0&limit=1281`;
+        const url = `https://pokeapi.co/api/v2/pokemon?offset=0&limit=500`;
         const result = await axios.get(url);
         setPokemonBaseData(result.data.results);
         setLoading(false);
@@ -309,7 +310,7 @@ function PokemonList() {
         activeFilters[key] = activeFilters[key].filter(e => e !== name)
         setActiveFilters({type : [...activeFilters['type']], region : [...activeFilters['region']]});
         setActiveDisplayFilters([...activeFilters['type'], ...activeFilters['region']]);
-        applyFilters();
+        // applyFilters();
     }
 
     function applyFilters() {
@@ -445,7 +446,13 @@ function PokemonList() {
             </div> : <></>}
             {loading ? <Loading></Loading> : <div style={cardContainer}>
                 {filteredPokemonData.map((ele) => {
-                    return <PokemonCard id={String(ele["data"]["id"])} name={ele["data"]["name"]} image={ele["data"]["sprites"]["other"]["official-artwork"]["front_default"]} types={ele["data"]["types"]}></PokemonCard>
+                    return <PokemonCard 
+                        id={String(ele["data"]["id"])} 
+                        name={ele["data"]["name"]} 
+                        image={ele["data"]["sprites"]["other"]["official-artwork"]["front_default"]} 
+                        types={ele["data"]["types"]} 
+                        info={ele["data"]}
+                    ></PokemonCard>
                 })}
             </div>}
         </div>

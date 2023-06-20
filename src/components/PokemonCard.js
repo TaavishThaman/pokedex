@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import imgMap from "../data/icons";
 
 const cardStyle = {
@@ -54,16 +55,18 @@ const idStyle = {
 
 function PokemonCard (props) {
     return (
-        <div style={cardStyle}>
-            <div style={idStyle}>{props.id.padStart(5, '0').padStart(6, '#')}</div>
-            <div style={nameStyle}>{props.name[0].toUpperCase()+props.name.substring(1)}</div>
-            <div style={imageContainer}>{
-                props.types.map(type => {
-                    return <img style={typeIcon} src={imgMap[type["type"]["name"]]}></img>
-                })
-            }</div>
-            <img style={imgStyle} src={props.image} alt=""/>
-        </div>
+        <Link to={`/pokemon/${props.name}`} state = {{from : props}}>
+            <div style={cardStyle}>
+                <div style={idStyle}>{props.id.padStart(5, '0').padStart(6, '#')}</div>
+                <div style={nameStyle}>{props.name[0].toUpperCase()+props.name.substring(1)}</div>
+                <div style={imageContainer}>{
+                    props.types.map(type => {
+                        return <img style={typeIcon} src={imgMap[type["type"]["name"]]}></img>
+                    })
+                }</div>
+                <img style={imgStyle} src={props.image} alt=""/>
+            </div>
+        </Link>
     )
 };
 
