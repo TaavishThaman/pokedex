@@ -85,6 +85,7 @@ const filterImg = {
     position: "absolute",
     top: "20px",
     zIndex: "20",
+    cursor : "pointer"
 }
 
 const filterCard = {
@@ -308,6 +309,7 @@ function PokemonList() {
         activeFilters[key] = activeFilters[key].filter(e => e !== name)
         setActiveFilters({type : [...activeFilters['type']], region : [...activeFilters['region']]});
         setActiveDisplayFilters([...activeFilters['type'], ...activeFilters['region']]);
+        applyFilters();
     }
 
     function applyFilters() {
