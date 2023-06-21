@@ -5,6 +5,7 @@ import axios from "axios";
 import imgMap from "../data/icons";
 import { buildStyles, CircularProgressbar, CircularProgressbarWithChildren } from 'react-circular-progressbar';
 import PokemonEvolution from "../components/PokemonEvolution";
+import Loading from "../components/Loading";
 
 const bodyContainer = {
     paddingLeft : "100px",
@@ -316,8 +317,10 @@ function PokemonDetails() {
     const [flavorText, setFlavorText] = useState();
     const [genera, setGenera] = useState();
     const [statData, setStatData] = useState({});
+    const [loading, setLoading] = useState(false);
 
     async function fetchSpeciesData() {
+        setLoading(true);
         const url = `https://pokeapi.co/api/v2/pokemon-species/${from.id}`;
         const result = await axios.get(url);
         setSpeciesData(result.data);
@@ -335,11 +338,14 @@ function PokemonDetails() {
                 break;
             }
         }
+        setLoading(false);
     }
 
     async function fetchEvolutionData() {
+        setLoading(true);
         const result = await axios.get(evolutionUrl);
         setEvolutionData(result.data);
+        setLoading(false);
     }
 
     useEffect(() => {
@@ -363,7 +369,7 @@ function PokemonDetails() {
     return (
         <div>
             <Header heading={params.name}></Header>
-            {Object.keys(speciesData).length > 0 && Object.keys(evolutionData).length > 0 ? <div style={bodyContainer}>
+            {!loading && Object.keys(speciesData).length > 0 && Object.keys(evolutionData).length > 0 ? <div style={bodyContainer}>
                 <div style={topContainer}>
                     <div style={imgContainer}>
                         <img style={dayImg} src={require('../assets/background-day.jpg')} alt=""></img>
@@ -470,7 +476,7 @@ function PokemonDetails() {
                 <div style={evolutionContainer}>
                     <PokemonEvolution data={evolutionData}></PokemonEvolution>
                 </div>
-            </div> : <></>}
+            </div> : <Loading></Loading>}
         </div>
     );
 }
