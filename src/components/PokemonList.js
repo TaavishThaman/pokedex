@@ -320,6 +320,7 @@ function PokemonList() {
         } else {
             setFilteredPokemonData(pokemonDetailedData);
         }
+        setShowFilters(false);
     }
 
     useEffect(() => {
