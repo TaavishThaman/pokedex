@@ -219,6 +219,19 @@ const applyBtn = {
     cursor : "pointer"
 }
 
+const loadMoreContainer = {
+    textAlign : 'center',
+    marginTop : "100px"
+}
+
+const loadMoreBtn = {
+    width : "250px",
+    height : "50px",
+    borderRadius : "15px",
+    fontSize : "28px",
+    backgroundColor : "#cccccc"
+}
+
 function PokemonList() {
     const [pokemonBaseData, setPokemonBaseData] = useState([]);
     const [pokemonDetailedData, setPokemonDetailedData] = useState([]);
@@ -230,12 +243,13 @@ function PokemonList() {
     const [typeData, setTypeData] = useState([]);
     const [activeFilters, setActiveFilters] = useState({type : [], region : []});
     const [activeDisplayFilters, setActiveDisplayFilters] = useState([]);
+    const [baseUrl, setBaseUrl] = useState();
 
     async function fetchPokemonData() {
         setLoading(true);
-        const url = `https://pokeapi.co/api/v2/pokemon?offset=0&limit=1281`;
-        // const url = `https://pokeapi.co/api/v2/pokemon?offset=0&limit=50`;
+        const url = `https://pokeapi.co/api/v2/pokemon?offset=0&limit=50`;
         const result = await axios.get(url);
+        setBaseUrl(result.data.next);
         setPokemonBaseData(result.data.results);
         setLoading(false);
     }
@@ -323,6 +337,29 @@ function PokemonList() {
         setShowFilters(false);
     }
 
+    async function loadMorePokemonBaseData(baseData) {
+        let promiseData = [];
+        for(let i=0; i< baseData.length; i++) {
+            const url = baseData[i].url;
+            const result = await axios.get(url);
+            promiseData.push(result);
+            await delay(0.1);
+        }
+
+        setPokemonDetailedData([...pokemonDetailedData, ...promiseData]);
+        setFilteredPokemonData([...pokemonDetailedData, ...promiseData]);
+    }
+
+    async function loadMorePokemon() {
+        if(baseUrl != null) {
+            const result = await axios.get(baseUrl);
+            setBaseUrl(result.data.next);
+            setPokemonBaseData([...pokemonBaseData, ...result.data.results]);
+            loadMorePokemonBaseData(result.data.results);
+            setBaseUrl(result.data.next);
+        }
+    }
+
     useEffect(() => {
         fetchPokemonData();
     }, []);
@@ -338,19 +375,6 @@ function PokemonList() {
     useEffect(() => {
         fetchTypesData();
     }, [])
-
-    // useEffect(() => {
-    //     if(pokemonBaseData) {
-    //         console.log('here')
-    //         const pokemonObj = {};
-    //         for(let i=0; i<pokemonDetailedData.length; i++) {
-    //             const ele = pokemonDetailedData[i];
-    //             let arr  = [ele["data"]["id"], ele["data"]["sprites"]["other"]["official-artwork"]["front_default"], ele["data"]["types"]]
-    //             pokemonObj[pokemonBaseData[i]["name"]] = arr;
-    //         }
-    //         console.log(JSON.stringify(pokemonObj))
-    //     }
-    // }, [pokemonBaseData])
 
     return (
         <div style={listStyle}>
@@ -438,7 +462,7 @@ function PokemonList() {
                     }}
                 />
             </div> : <></>}
-            {loading ? <Loading></Loading> : <div style={cardContainer}>
+            {loading && pokemonDetailedData.length === 0 ? <Loading></Loading> : <div style={cardContainer}>
                 {filteredPokemonData.map((ele) => {
                     return <PokemonCard 
                         id={String(ele["data"]["id"])} 
@@ -449,6 +473,11 @@ function PokemonList() {
                     ></PokemonCard>
                 })}
             </div>}
+            <div style={loadMoreContainer}>
+                <input style={loadMoreBtn} type="button" onClick={() => {
+                    loadMorePokemon();
+                }} value={'Load More'}/>
+            </div>
         </div>
     );
 }
