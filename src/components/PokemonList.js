@@ -229,7 +229,8 @@ const loadMoreBtn = {
     height : "50px",
     borderRadius : "15px",
     fontSize : "28px",
-    backgroundColor : "#cccccc"
+    backgroundColor : "#cccccc",
+    cursor : "pointer"
 }
 
 function PokemonList() {
@@ -244,6 +245,7 @@ function PokemonList() {
     const [activeFilters, setActiveFilters] = useState({type : [], region : []});
     const [activeDisplayFilters, setActiveDisplayFilters] = useState([]);
     const [baseUrl, setBaseUrl] = useState();
+    const [loadNext, setLoadNext] = useState(false);
 
     async function fetchPokemonData() {
         setLoading(true);
@@ -261,7 +263,7 @@ function PokemonList() {
             const url = pokemonBaseData[i].url;
             const result = await axios.get(url);
             promiseData.push(result);
-            await delay(0.1);
+            await delay(1);
         }
 
         setPokemonDetailedData(promiseData);
@@ -343,7 +345,7 @@ function PokemonList() {
             const url = baseData[i].url;
             const result = await axios.get(url);
             promiseData.push(result);
-            await delay(0.1);
+            await delay(1);
         }
 
         setPokemonDetailedData([...pokemonDetailedData, ...promiseData]);
@@ -352,11 +354,13 @@ function PokemonList() {
 
     async function loadMorePokemon() {
         if(baseUrl != null) {
+            setLoadNext(true);
             const result = await axios.get(baseUrl);
             setBaseUrl(result.data.next);
             setPokemonBaseData([...pokemonBaseData, ...result.data.results]);
             loadMorePokemonBaseData(result.data.results);
             setBaseUrl(result.data.next);
+            setLoadNext(false);
         }
     }
 
@@ -476,7 +480,7 @@ function PokemonList() {
             <div style={loadMoreContainer}>
                 <input style={loadMoreBtn} type="button" onClick={() => {
                     loadMorePokemon();
-                }} value={'Load More'}/>
+                }} value={'Load More'} disabled={loadNext}/>
             </div>
         </div>
     );
