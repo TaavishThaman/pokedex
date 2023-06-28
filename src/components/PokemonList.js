@@ -5,6 +5,7 @@ import delay from 'delay';
 import Loading from "./Loading";
 import imgMap from "../data/icons";
 import typeBackgrounds from "../data/background-colors";
+import LoadingNext from "./LoadingNext";
 
 const listStyle = {
     height : "100%",
@@ -227,7 +228,7 @@ const loadMoreContainer = {
 const loadMoreBtn = {
     width : "250px",
     height : "50px",
-    borderRadius : "15px",
+    borderRadius : "10px",
     fontSize : "28px",
     backgroundColor : "#cccccc",
     cursor : "pointer"
@@ -249,15 +250,13 @@ function PokemonList() {
 
     async function fetchPokemonData() {
         setLoading(true);
-        const url = `https://pokeapi.co/api/v2/pokemon?offset=0&limit=50`;
+        const url = `https://pokeapi.co/api/v2/pokemon?offset=0&limit=20`;
         const result = await axios.get(url);
         setBaseUrl(result.data.next);
         setPokemonBaseData(result.data.results);
-        setLoading(false);
     }
 
     async function fetchPokemonDetailedData() {
-        setLoading(true);
         let promiseData = [];
         for(let i=0; i< pokemonBaseData.length; i++) {
             const url = pokemonBaseData[i].url;
@@ -482,6 +481,7 @@ function PokemonList() {
                     loadMorePokemon();
                 }} value={'Load More'} disabled={loadNext}/>
             </div>
+            { loadNext ? <LoadingNext></LoadingNext> : <></>}
         </div>
     );
 }
