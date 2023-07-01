@@ -250,7 +250,7 @@ function PokemonList() {
 
     async function fetchPokemonData() {
         setLoading(true);
-        const url = `https://pokeapi.co/api/v2/pokemon?offset=0&limit=20`;
+        const url = `https://pokeapi.co/api/v2/pokemon?offset=0&limit=8`;
         const result = await axios.get(url);
         setBaseUrl(result.data.next);
         setPokemonBaseData(result.data.results);
@@ -452,7 +452,7 @@ function PokemonList() {
                     </div>
                 </div>
             </div> : <div></div>}
-            {!loading ? <div style={inputDiv}>
+            {!loading && pokemonDetailedData.length > 0 ? <div style={inputDiv}>
                 <img style={searchIcon} src={require("../assets/search.png")}></img>
                 <input 
                     style={inputStyle}
@@ -476,12 +476,11 @@ function PokemonList() {
                     ></PokemonCard>
                 })}
             </div>}
-            <div style={loadMoreContainer}>
+            { loadNext ? <LoadingNext></LoadingNext> : <div style={loadMoreContainer}>
                 <input style={loadMoreBtn} type="button" onClick={() => {
                     loadMorePokemon();
                 }} value={'Load More'} disabled={loadNext}/>
-            </div>
-            { loadNext ? <LoadingNext></LoadingNext> : <></>}
+            </div>}
         </div>
     );
 }
