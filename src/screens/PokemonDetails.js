@@ -1,4 +1,4 @@
-import { useParams, useLocation } from "react-router-dom";
+import { useParams, useLocation, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import Header from "../components/Header";
 import axios from "axios";
@@ -318,6 +318,7 @@ function PokemonDetails() {
     const [genera, setGenera] = useState();
     const [statData, setStatData] = useState({});
     const [loading, setLoading] = useState(false);
+    const navigate = useNavigate();
 
     async function fetchSpeciesData() {
         setLoading(true);
@@ -383,7 +384,7 @@ function PokemonDetails() {
                                 {from.id.padStart(5, '0').padStart(6, '#')}
                             </div>
                         </div>
-                        <div style={backBtn}>
+                        <div style={backBtn} onClick={() => {navigate(-1)}}>
                             <img style={backImg} src={require('../assets/chevron_left.png')}></img>
                         </div>
                         <img style={pokemonImg} src={from.image}></img>
