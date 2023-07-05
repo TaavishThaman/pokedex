@@ -16,7 +16,8 @@ const headerTitle = {
     fontSize: "28px",
     lineHeight: "33px",
     color : "#1E1E1F",
-    fontFamily : "Roboto"
+    fontFamily : "Roboto",
+    textTransform : "capitalize"
 }
 
 function Header(props) {

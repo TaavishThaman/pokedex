@@ -26,7 +26,8 @@ const nameStyle = {
     position : "absolute",
     top : "50px",
     left : "50px",
-    maxWidth : "150px"
+    maxWidth : "150px",
+    textTransform : "capitalize"
 };
 
 const imageContainer = {
@@ -58,7 +59,7 @@ function PokemonCard (props) {
         <Link to={`/pokemon/${props.name}`} state = {{from : props}}>
             <div style={cardStyle}>
                 <div style={idStyle}>{props.id.padStart(5, '0').padStart(6, '#')}</div>
-                <div style={nameStyle}>{props.name[0].toUpperCase()+props.name.substring(1)}</div>
+                <div style={nameStyle}>{props.name}</div>
                 <div style={imageContainer}>{
                     props.types.map(type => {
                         return <img style={typeIcon} src={imgMap[type["type"]["name"]]}></img>
