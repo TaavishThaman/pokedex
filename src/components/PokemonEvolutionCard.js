@@ -65,7 +65,7 @@ function PokemonEvolutionCard(props) {
         <div style={cardStyle}>
             <div style={idStyle}>{props.cardData[1][0].toString().padStart(5, '0').padStart(6, '#')}</div>
             <div style={nameContainer}>
-                <div style={nameStyle}>{props.cardData[0][0]}</div>
+                <div style={nameStyle}>{props.cardData[0]}</div>
             </div>
             <div style={iconContainer}>
                 {
