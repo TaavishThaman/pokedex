@@ -250,20 +250,19 @@ function PokemonList() {
 
     async function fetchPokemonData() {
         setLoading(true);
-        const url = `https://pokeapi.co/api/v2/pokemon?offset=0&limit=8`;
+        const url = `https://pokeapi.co/api/v2/pokemon?offset=0&limit=40`;
         const result = await axios.get(url);
         setBaseUrl(result.data.next);
         setPokemonBaseData(result.data.results);
     }
 
+    async function fetchAndProcessData(pokemonBaseUrl) {
+        const data = await axios.get(pokemonBaseUrl);
+        return data;
+    }
+
     async function fetchPokemonDetailedData() {
-        let promiseData = [];
-        for(let i=0; i< pokemonBaseData.length; i++) {
-            const url = pokemonBaseData[i].url;
-            const result = await axios.get(url);
-            promiseData.push(result);
-            await delay(1);
-        }
+        let promiseData = await Promise.all(pokemonBaseData.map(async d => await fetchAndProcessData(d.url)));
 
         setPokemonDetailedData(promiseData);
         setFilteredPokemonData(promiseData);
@@ -339,14 +338,7 @@ function PokemonList() {
     }
 
     async function loadMorePokemonBaseData(baseData) {
-        let promiseData = [];
-        for(let i=0; i< baseData.length; i++) {
-            const url = baseData[i].url;
-            const result = await axios.get(url);
-            promiseData.push(result);
-            await delay(1);
-        }
-
+        let promiseData = await Promise.all(baseData.map(async d => await fetchAndProcessData(d.url)));
         setPokemonDetailedData([...pokemonDetailedData, ...promiseData]);
         setFilteredPokemonData([...pokemonDetailedData, ...promiseData]);
     }
