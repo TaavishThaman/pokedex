@@ -262,7 +262,7 @@ function PokemonList() {
     }
 
     async function fetchPokemonDetailedData() {
-        let promiseData = await Promise.all(pokemonBaseData.map(async d => await fetchAndProcessData(d.url)));
+        let promiseData = await Promise.all(pokemonBaseData.map(d => fetchAndProcessData(d.url)));
 
         setPokemonDetailedData(promiseData);
         setFilteredPokemonData(promiseData);
@@ -338,7 +338,7 @@ function PokemonList() {
     }
 
     async function loadMorePokemonBaseData(baseData) {
-        let promiseData = await Promise.all(baseData.map(async d => await fetchAndProcessData(d.url)));
+        let promiseData = await Promise.all(baseData.map(d => fetchAndProcessData(d.url)));
         setPokemonDetailedData([...pokemonDetailedData, ...promiseData]);
         setFilteredPokemonData([...pokemonDetailedData, ...promiseData]);
     }
