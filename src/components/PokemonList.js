@@ -222,7 +222,8 @@ const applyBtn = {
 
 const loadMoreContainer = {
     textAlign : 'center',
-    marginTop : "100px"
+    marginTop : "100px",
+    backgroundColor : "#F6F0ED"
 }
 
 const loadMoreBtn = {
@@ -469,9 +470,9 @@ function PokemonList() {
                 })}
             </div>}
             { loadNext ? <LoadingNext></LoadingNext> : <div style={loadMoreContainer}>
-                <input style={loadMoreBtn} type="button" onClick={() => {
+                {pokemonDetailedData.length > 0 ? <input style={loadMoreBtn} type="button" onClick={() => {
                     loadMorePokemon();
-                }} value={'Load More'} disabled={loadNext}/>
+                }} value={'Load More'} disabled={loadNext}/> : <></>}
             </div>}
         </div>
     );
